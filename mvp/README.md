@@ -38,7 +38,15 @@ Atalhos de URL (úteis para demonstrar perfis):
 - **Clientes**: lista, ficha com pasta no Drive e histórico de negócios. Cadastro rápido (Nome + Cidade) ou completo.
 - **Calendário**: Geral ou Minhas tarefas, em dia, semana ou mês, com reuniões, gravações e prazos.
 - **Dashboard de vendas**: vendas, tempo médio para fechamento, taxa de conversão e sales cycle length, calculados a partir do histórico dos negócios.
-- **Fluxo de caixa**: entradas e saídas por dia, previsto × realizado, lançamentos manuais, saídas por categoria e log de alterações de valor.
+- **Fluxo de caixa**: a tela tem, de cima para baixo:
+  - a linha Caixa (início do mês, caixa hoje, previsto no fim do mês);
+  - o quadro Realizado × Pendente;
+  - o painel de Atrasados, de qualquer mês;
+  - o gráfico de caixa e movimento por mês, com card de detalhe, clique e teclado;
+  - os lançamentos do mês agrupados em Pendentes e Realizados, com a caixa "Realizado";
+  - o log de alterações de valor.
+
+  As contas ficam em `js/cash.js`, em centavos e testadas com `node --test mvp/tests`.
 - **Configurações** (Administrador): usuários com vários perfis, e as categorias do caixa.
 
 As permissões seguem a tabela do intent §2.2. O "pipeline parcial" foi interpretado assim:

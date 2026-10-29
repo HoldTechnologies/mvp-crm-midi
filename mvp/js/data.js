@@ -205,6 +205,10 @@
   add('out', 'Anúncio no Instagram', 300, d(-6), 'Marketing');
   add('in', 'Locação de equipamento para parceiro', 600, d(-11), 'Outras receitas');
   add('in', 'Oficina de vídeo para celular', 900, d(14), 'Outras receitas');
+  // saldo de abertura, para o caixa não começar do zero, e dois pendentes vencidos para o painel Atrasados
+  add('in', 'Saldo em conta na implantação do CRM', 48000, dm(1, -3), 'Outras receitas');
+  manual.push({ id: `m${mid++}`, kind: 'out', desc: 'Manutenção da câmera principal', value: 640, date: d(-9), category: 'Equipamentos', status: 'previsto' });
+  manual.push({ id: `m${mid++}`, kind: 'in', desc: 'Reembolso de diárias — parceiro', value: 1200, date: d(-40), category: 'Outras receitas', status: 'previsto' });
 
   const categories = {
     in: ['Venda de projeto', 'Outras receitas'],

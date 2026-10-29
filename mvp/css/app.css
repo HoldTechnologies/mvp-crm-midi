@@ -390,11 +390,111 @@ dialog.dlg footer { display: flex; justify-content: flex-end; gap: 8px; padding:
 .agenda li { display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
 .agenda li:last-child { border-bottom: 0; }
 
-/* ---------- fluxo de caixa ---------- */
-.toggle-real { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; height: 26px; border: 1px solid var(--control); background: none; font-size: var(--fs-small); font-weight: 600; cursor: pointer; white-space: nowrap; }
-.toggle-real:hover { background: var(--raised); }
-.toggle-real.on { border-color: transparent; background: var(--pill-positive-bg); color: var(--pill-positive-ink); }
+/* ---------- fluxo de caixa ----------
+   Regra do dinheiro: entrada verde com "+", saída vermelha com "−"; o vermelho REC não pinta dado nesta tela.
+   Realizado é cheio (painel, barra sólida, linha contínua); pendente é vazado (tracejado, hachura). */
 .amount-in { color: var(--positive); }
+.cx-month { font-size: 16px; font-weight: 800; }
+.panel .head-left { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+/* linha Caixa e quadro Realizado/Pendente: rótulo à esquerda e 3 células */
+.cash-pair { display: grid; gap: 8px; }
+.cashrow { display: grid; grid-template-columns: 200px repeat(3, minmax(0, 1fr)); background: var(--surface); }
+.cashrow > * { min-width: 0; padding: 16px var(--card-pad) 18px; }
+.cashrow.total { border-top: 2px solid var(--text); }
+.cr-head h2 { font-size: var(--fs-section); line-height: 1.3; font-weight: 800; letter-spacing: -0.01em; }
+.cr-head span { display: block; font-size: var(--fs-small); line-height: 16px; color: var(--muted); }
+.cr-cell { border-left: 1px solid var(--border); container-type: inline-size; }
+.cr-k { color: var(--muted); }
+.cr-v { margin-top: 6px; font-size: var(--fs-kpi); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* o número em destaque encolhe com a célula e nunca quebra nem vaza */
+.cr-v.lead { font-size: clamp(20px, 10.5cqi, 32px); font-weight: 800; }
+.cr-n { margin-top: 4px; font-size: var(--fs-small); line-height: 16px; color: var(--muted); }
+.cashrow.pend { background: transparent; border: 1px dashed var(--control); }
+.cashrow.pend .cr-cell { border-left: 1px dashed var(--control); }
+.cashrow.pend .cr-v { font-size: 20px; }
+.cashrow.pend .cr-v.lead { font-size: clamp(18px, 9cqi, 26px); }
+/* atrasados */
+.panel.late { border-top: 2px solid var(--negative); }
+.all-clear { padding: 12px 14px; background: var(--pill-positive-bg); color: var(--pill-positive-ink); }
+/* tabela de lançamentos */
+.cx-table td { vertical-align: middle; }
+.cx-date { width: 1%; white-space: nowrap; }
+.cx-title { font-weight: 600; }
+.cx-deal:hover { text-decoration: underline; text-underline-offset: 3px; }
+.cx-val { white-space: nowrap; }
+.cx-act { width: 1%; white-space: nowrap; text-align: left; }
+.cx-act > div { display: flex; align-items: center; gap: 16px; }
+.cx-table tr.grp th { height: auto; padding: 20px 0 8px; font-size: var(--fs-body); font-weight: 800; color: var(--text); white-space: normal; }
+.cx-table tr.grp:first-child th { padding-top: 4px; }
+.cx-table tr.grp th span { margin-left: 10px; font-size: var(--fs-small); font-weight: 400; color: var(--muted); }
+/* gráfico: cores pelos tokens do tema atual */
+.cc-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 8px; font-size: var(--fs-small); color: var(--muted); }
+.cc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.cc-legend i { display: inline-block; width: 12px; height: 12px; }
+.cc-legend .sw-in { background: var(--positive); }
+.cc-legend .sw-out { background: var(--negative); }
+.cc-legend .sw-prev { background: repeating-linear-gradient(45deg, var(--muted) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px var(--control); }
+.cc-legend .sw-line { width: 18px; height: 0; border-top: 2px solid var(--text); }
+.cc-legend .sw-proj { width: 18px; height: 0; border-top: 2px dashed var(--text); }
+.cc { position: relative; }
+.cc-plot { min-width: 0; touch-action: manipulation; }
+.cc-plot:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.cc svg { display: block; max-width: none; }
+.cc-in { fill: var(--positive); }
+.cc-out { fill: var(--negative); }
+.cc-in-tint { fill: var(--pill-positive-bg); }
+.cc-out-tint { fill: var(--pill-negative-bg); }
+.cc-in-prev { fill: url(#cc-hatch-in); }
+.cc-out-prev { fill: url(#cc-hatch-out); }
+.cc-grid { stroke: var(--grid); }
+.cc-zero { stroke: var(--divider); stroke-width: 1.5; }
+.cc-tick, .cc-month, .cc-year { fill: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.cc-month.now { fill: var(--text); font-weight: 600; }
+.cc-month.open { fill: var(--accent-ink); font-weight: 800; }
+.cc-open-mark { fill: var(--accent); }
+.cc-band { fill: color-mix(in srgb, var(--text) 5%, transparent); }
+.cc-hover { fill: transparent; }
+.cc-hover.on { fill: color-mix(in srgb, var(--text) 7%, transparent); }
+.cc-line { stroke: var(--text); stroke-width: 2; stroke-linecap: square; }
+.cc-line.proj { stroke-dasharray: 5 4; }
+.cc-pt { fill: var(--text); }
+.cc-pt.proj { fill: var(--surface); stroke: var(--text); stroke-width: 2; }
+.cc-hit { fill: transparent; cursor: pointer; }
+.cc-card { position: absolute; top: 8px; z-index: 5; width: 264px; padding: 12px 14px; background: var(--ground); box-shadow: var(--shadow-float); pointer-events: none; font-variant-numeric: tabular-nums; }
+.cc-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--divider); }
+.cc-card-head strong { font-weight: 800; }
+.cc-card-head span { font-size: var(--fs-small); color: var(--muted); }
+.cc-card dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; margin-top: 8px; }
+.cc-card dd { padding-left: 12px; text-align: right; font-weight: 600; }
+.cc-card dd.cc-detail { grid-column: 1 / -1; margin-bottom: 4px; text-align: left; font-size: 12px; line-height: 16px; font-weight: 400; color: var(--muted); }
+.cc-card .cc-total { margin-top: 6px; padding-top: 8px; border-top: 2px solid var(--divider); font-weight: 800; }
+.cc-foot { margin-top: 8px; font-size: var(--fs-small); color: var(--muted); }
+@media (max-width: 1100px) {
+  .cashrow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cashrow .cr-head { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; padding-bottom: 0; }
+  .cashrow .cr-head span { display: inline; }
+  .cashrow .cr-cell:nth-child(2) { border-left: 0; }
+}
+@media (max-width: 860px) {
+  /* lançamentos viram cartões: data; descrição e valor; Realizado e editar */
+  .cx-table thead { display: none; }
+  .cx-table, .cx-table tbody, .cx-table tr { display: block; }
+  .cx-table tr:not(.grp) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+  .cx-table tr.grp th { display: block; padding-left: 0; }
+  .cx-table td { display: block; width: auto; padding: 0; border: 0; }
+  .cx-table .cx-date { grid-column: 1 / -1; font-size: var(--fs-small); color: var(--muted); white-space: normal; }
+  .cx-table .cx-act { grid-column: 1 / -1; margin-top: 4px; }
+}
+@media (max-width: 560px) {
+  .cashrow { grid-template-columns: minmax(0, 1fr); }
+  .cashrow .cr-head { padding: 12px 16px 6px; flex-wrap: wrap; }
+  .cashrow .cr-cell { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 12px; padding: 10px 16px; border-left: 0; border-top: 1px solid var(--border); }
+  .cashrow.pend .cr-cell { border-left: 0; border-top: 1px dashed var(--control); }
+  .cr-v { margin-top: 0; text-align: right; }
+  .cr-v.lead { font-size: 22px; }
+  .cashrow.pend .cr-v, .cashrow.pend .cr-v.lead { font-size: 18px; }
+  .cr-n { grid-column: 1 / -1; }
+}
 
 /* ---------- telefone: o menu dobra numa barra superior ---------- */
 @media (max-width: 1100px) {
