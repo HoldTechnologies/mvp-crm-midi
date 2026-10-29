@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paleta CRM</title>
+  <meta name="description" content="Protótipo do CRM da produtora: pomodoro, clientes, pipeline de vendas e produção, calendário, vendas e fluxo de caixa, com dados de exemplo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/app.css">
+  <script>
+    // aplica o tema antes do primeiro desenho, para não piscar
+    try {
+      var forced = new URLSearchParams(location.search).get('theme');
+      if (forced === 'light' || forced === 'dark') localStorage.setItem('paleta-crm-theme', forced);
+      document.documentElement.dataset.theme = localStorage.getItem('paleta-crm-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toasts" aria-live="polite"></div>
+  <script src="js/charts.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/views/pomodoro.js"></script>
+  <script src="js/views/clientes.js"></script>
+  <script src="js/views/pipeline.js"></script>
+  <script src="js/views/negocio.js"></script>
+  <script src="js/views/calendario.js"></script>
+  <script src="js/views/vendas.js"></script>
+  <script src="js/views/caixa.js"></script>
+  <script src="js/views/configuracoes.js"></script>
+</body>
+</html>
